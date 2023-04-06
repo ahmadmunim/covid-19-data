@@ -65,7 +65,7 @@ def main():
     plot.set_title('Average Vaccination Rates Based on Age Group on 2021-10-06')
     
     to_html = mp.fig_to_html(fig)
-    html_file = open('vaccine.html', 'w')
+    html_file = open('../views/vaccine.html', 'w')
     html_file.write(to_html)
     html_file.close
 

@@ -14,7 +14,7 @@ def generate_hos_query(region):
         
 def generate_html(figure):
     to_html = mp.fig_to_html(figure)
-    html_file = open('hospitalization.html', 'w')
+    html_file = open('../views/hospitalization.html', 'w')
     html_file.write(to_html)
     html_file.close
 
@@ -32,6 +32,11 @@ def render_graph(data, region, row, figure):
     ax1.plot(x, vent_y, label='on ventilator')
     ax1.legend()
     ax1.set_title(region + ' Region')
+    
+def execute_query(cursor, region):
+    query = generate_hos_query('\''+ region + '\'')
+    cursor.execute(query); 
+    return cursor.fetchall();   
 
 def main():
     DRIVER_NAME = 'SQL SERVER'
@@ -52,34 +57,19 @@ def main():
     # Create the GUI window
     fig1 = plt.figure(figsize=(20,10))
 
-    central_query = generate_hos_query('\'CENTRAL\'')
-    cursor.execute(central_query);
-    CENTRAL_DATA = cursor.fetchall();
-
+    CENTRAL_DATA = execute_query(cursor,'CENTRAL')
     render_graph(CENTRAL_DATA, 'CENTRAL', 1, fig1)
 
-    east_query = generate_hos_query('\'EAST\'')
-    cursor.execute(east_query);
-    EAST_DATA = cursor.fetchall();
-
+    EAST_DATA = execute_query(cursor,'EAST')
     render_graph(EAST_DATA, 'EAST', 2, fig1)
 
-    west_query = generate_hos_query('\'WEST\'')
-    cursor.execute(west_query);
-    WEST_DATA = cursor.fetchall();
-
+    WEST_DATA = execute_query(cursor,'WEST')
     render_graph(WEST_DATA, 'WEST', 3, fig1)
 
-    north_query = generate_hos_query('\'NORTH\'')
-    cursor.execute(north_query);
-    NORTH_DATA = cursor.fetchall();
-
+    NORTH_DATA = execute_query(cursor,'NORTH')
     render_graph(NORTH_DATA, 'NORTH', 4, fig1)
 
-    toronto_query = generate_hos_query('\'TORONTO\'')
-    cursor.execute(toronto_query);
-    TORONTO_DATA = cursor.fetchall();
-
+    TORONTO_DATA = execute_query(cursor,'TORONTO')
     render_graph(TORONTO_DATA, 'TORONTO', 5, fig1)
 
     generate_html(fig1)
